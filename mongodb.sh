@@ -9,18 +9,18 @@ y="\e[33m"
 n="\e[0m"
 
 if [ $userid -ne 0]; then
-  echo "$r run the script with root access $n"
+  echo -e "$r run the script with root access $n"
   exit 1
 else
-  echo "$g you ar root user $n"
+  echo -e "$g you ar root user $n"
 fi
 
 validate() {
   if [ $1 -ne 0  ]; then
-     echo "$2 ....$r failed $n"
+     echo -e "$2 ....$r failed $n"
      exit 1
   else  
-     echo "$2 .... $g success $n"
+     echo -e "$2 .... $g success $n"
   fi
 }
 
