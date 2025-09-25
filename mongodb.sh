@@ -8,7 +8,7 @@ g="\e[32m"
 y="\e[33m"
 n="\e[0m"
 
-if [ $userid -ne 0]; then
+if [ $userid -ne 0 ]; then
   echo -e "$r run the script with root access $n"
   exit 1
 else
