@@ -1,7 +1,7 @@
 #!/bin/bash
 
 userid=$(id -u)
-date=$(date +%s)
+date=$(date)
 
 r="\e[31m"
 g="\e[32m"
@@ -43,4 +43,3 @@ validate $? "allowing remote connections"
 
 systemctl restart mongod
 validate $? "restarting mongodb"
-
