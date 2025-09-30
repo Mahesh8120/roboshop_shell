@@ -75,8 +75,8 @@ systemctl daemon-reload
 systemctl enable user &>>$log_file
 validate $? "Enable user"
 
-systemctl restart cart
-validate $? "Restarted cart"
+systemctl restart user
+validate $? "Restarted user"
 
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
