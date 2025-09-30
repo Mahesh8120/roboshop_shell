@@ -35,36 +35,36 @@ validate() {
   fi
 }
 
-dnf module disable nginx -y
+dnf module disable nginx -y &>>$log_file
 validate $? "disabling nginx"
 
-dnf module enable nginx:1.24 -y
+dnf module enable nginx:1.24 -y &>>$log_file
 validate $? "enabling nginx"
 
-dnf install nginx -y
+dnf install nginx -y &>>$log_file
 validate $? "installing nginx"
 
-systemctl enable nginx
+systemctl enable nginx &>>$log_file
 systemctl start nginx
 validate $? "starting nginx"
 
-rm -rf /usr/share/nginx/html/* 
+rm -rf /usr/share/nginx/html/* &>>$log_file
 validate $? "Removing default content"
 
-curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
+curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip &>>$log_file
 validate $? "Downloading frontend component"
 
-cd /usr/share/nginx/html 
+cd /usr/share/nginx/html &>>$log_file
 validate $? "Changing to nginx html directory"
 
-unzip /tmp/frontend.zip
+unzip /tmp/frontend.zip &>>$log_file
 validate $? "unzipping frontend component"
 
-rm -rf /etc/nginx/nginx.conf
+rm -rf /etc/nginx/nginx.conf &>>$log_file
 cp $script_dir/nginx.conf /etc/nginx/nginx.conf
 validate $? "Copying nginx configuration file"
 
-systemctl restart nginx 
+systemctl restart nginx &>>$log_file
 validate $? "restarting nginx"
 
 END_TIME=$(date +%s)
