@@ -44,36 +44,36 @@ validate $? "installing nodejs"
 id roboshop &>>$log_file
 if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$log_file
-    VALIDATE $? "Creating system user"
+    validate $? "Creating system user"
 else
     echo -e "User already exist ... $y SKIPPING $n"
 fi
 
-mkdir /app &>>$log_file
+mkdir -p /app &>>$log_file
 validate $? "creating app directory"
 
 curl -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip  &>>$log_file
 validate $? "downloading user component"
 
 cd /app 
-VALIDATE $? "Changing to app directory"
+validate $? "Changing to app directory"
 
 rm -rf /app/*
-VALIDATE $? "Removing existing code"
+validate $? "Removing existing code"
 
 unzip /tmp/user.zip &>>$log_file
 validate $? "unzipping user component"
 
 npm install &>>$log_file
-VALIDATE $? "Install dependencies"
+validate $? "Install dependencies"
 
-cp $script_dir /user.service /etc/systemd/system/user.service
-VALIDATE $? "Copy systemctl service"
+cp $script_dir/user.service /etc/systemd/system/user.service
+validate $? "Copy systemctl service"
 
 systemctl daemon-reload
 
 systemctl enable user &>>$log_file
-VALIDATE $? "Enable user"
+validate $? "Enable user"
 
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
