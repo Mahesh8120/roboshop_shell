@@ -51,7 +51,7 @@ unzip /tmp/frontend.zip &>>$log_file
 validate $? "Downloading frontend"
 
 rm -rf /etc/nginx/nginx.conf
-cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf
+cp $script_dir/nginx.conf /etc/nginx/nginx.conf
 validate $? "Copying nginx.conf"
 
 systemctl restart nginx 

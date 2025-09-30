@@ -64,6 +64,9 @@ cp $script_dir/shipping.service /etc/systemd/system/shipping.service
 systemctl daemon-reload
 systemctl enable shipping  &>>$log_file
 
+systemctl start shipping
+validate $? "starting shipping service"
+
 dnf install mysql -y  &>>$log_file
 
 mysql -h $mysql_host -uroot -pRoboShop@1 -e 'use cities' &>>$log_file
