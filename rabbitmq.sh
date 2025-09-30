@@ -8,9 +8,10 @@ n="\e[0m"
 logs_folder="/var/log/roboshop_shell"
 script_name=$( echo $0 | cut -d "." -f1 )
 log_file="$logs_folder/$script_name.log"
-
-mkdir -p $logs_folder
+START_TIME=$(date +%s)
+script_dir=$PWD
 echo "Script started executed at: $(date)" | tee -a $log_file
+mkdir -p $logs_folder
 
 if [ $userid -ne 0 ]; then
   echo -e "$r run the script with root access $n" 
@@ -28,28 +29,22 @@ validate() {
   fi
 }
 
-cp mongo.repo /etc/yum.repos.d/mongo.repo
-validate $? "copying mongo repo file"
+cp $script_dir/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo &>>$LOG_FILE
+VALIDATE $? "Adding RabbitMQ repo"
 
-dnf install mongodb-org -y
-validate $? "installing mongodb" &>>$log_file
+dnf install rabbitmq-server -y
+validate $? "Installing RabbitMQ" &>>$log_file
 
-systemctl enable mongod 
-validate $? "enabling mongodb" &>>$log_file
+systemctl enable rabbitmq-server
+validate $? "Enabling RabbitMQ" &>>$log_file
 
-systemctl start mongod 
-validate $? "starting mongodb"
+systemctl start rabbitmq-server
+validate $? "Starting RabbitMQ" &>>$log_file
 
-sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
-# i permanently replacing
-# s-substitution
-# g-globally
+rabbitmqctl add_user roboshop roboshop123
+rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
+validate $? "Creating application user"
 
-validate $? "allowing remote connections"
-
-systemctl restart mongod
-validate $? "restarting mongodb"
-
-ND_TIME=$(date +%s)
+END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
 echo -e "Script executed in: $y $TOTAL_TIME Seconds $n"

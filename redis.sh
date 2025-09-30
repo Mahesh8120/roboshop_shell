@@ -8,6 +8,7 @@ n="\e[0m"
 logs_folder="/var/log/roboshop_shell"
 script_name=$( echo $0 | cut -d "." -f1 )
 log_file="$logs_folder/$script_name.log"
+START_TIME=$(date +%s)
 
 mkdir -p $logs_folder
 echo "Script started executed at: $(date)" | tee -a $log_file
@@ -28,28 +29,23 @@ validate() {
   fi
 }
 
-cp mongo.repo /etc/yum.repos.d/mongo.repo
-validate $? "copying mongo repo file"
+dnf module disable redis -y
+validate$? "disabling redis"
 
-dnf install mongodb-org -y
-validate $? "installing mongodb" &>>$log_file
+dnf module enable redis:7 -y
+validate $? "enabling redis 7"
 
-systemctl enable mongod 
-validate $? "enabling mongodb" &>>$log_file
+dnf install redis -y 
+validate $? "installing redis" &>>$log_file
 
-systemctl start mongod 
-validate $? "starting mongodb"
-
-sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
-# i permanently replacing
-# s-substitution
-# g-globally
-
+sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/ c protected-mode no' /etc/redis/redis.conf
 validate $? "allowing remote connections"
 
-systemctl restart mongod
-validate $? "restarting mongodb"
+systemctl enable redis 
+validate $? "enabling redis" &>>$log_file
 
-ND_TIME=$(date +%s)
+systemctl start redis 
+
+END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
 echo -e "Script executed in: $y $TOTAL_TIME Seconds $n"
