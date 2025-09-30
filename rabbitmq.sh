@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 userid=$(id -u)
 r="\e[31m"  
 g="\e[32m"
