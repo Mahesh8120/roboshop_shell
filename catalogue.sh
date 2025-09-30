@@ -10,6 +10,7 @@ script_name=$( echo $0 | cut -d "." -f1 )
 log_file="$logs_folder/$script_name.log"
 mongodb_host="mongodb.sitaram.icu"
 script_dir=$PWD
+START_TIME=$(date +%s)
 
 mkdir -p $logs_folder
 echo "Script started executed at: $(date)" | tee -a $log_file
@@ -46,6 +47,9 @@ if [ $? -ne 0 ]; then
 else
     echo -e "User already exist ... $y SKIPPING $n"
 fi
+
+rm -rf /app/*
+validate $? "Removing existing code"
 
 mkdir /app &>>$log_file
 validate $? "creating app directory"
@@ -89,6 +93,6 @@ fi
 systemctl restart catalogue &>>$log_file
 validate $? "Restarted catalogue"
 
-ND_TIME=$(date +%s)
+END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
 echo -e "Script executed in: $y $TOTAL_TIME Seconds $n"
