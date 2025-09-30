@@ -14,6 +14,7 @@ cart_host="cart.sitaram.icu"
 shipping_host="shipping.sitaram.icu"
 payment_host="payment.sitaram.icu"
 script_dir=$PWD
+START_TIME=$(date +%s)
 
 mkdir -p $logs_folder
 echo "Script started executed at: $(date)" | tee -a $log_file
@@ -54,7 +55,7 @@ curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v
 validate $? "Downloading frontend component"
 
 cd /usr/share/nginx/html 
-VALIDATE $? "Changing to nginx html directory"
+validate $? "Changing to nginx html directory"
 
 unzip /tmp/frontend.zip
 validate $? "unzipping frontend component"
@@ -66,6 +67,6 @@ validate $? "Copying nginx configuration file"
 systemctl restart nginx 
 validate $? "restarting nginx"
 
-ND_TIME=$(date +%s)
+END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
 echo -e "Script executed in: $y $TOTAL_TIME Seconds $n"
