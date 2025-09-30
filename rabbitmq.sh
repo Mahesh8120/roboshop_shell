@@ -41,8 +41,8 @@ validate $? "Enabling RabbitMQ"
 systemctl start rabbitmq-server
 validate $? "Starting RabbitMQ" 
 
-rabbitmqctl add_user roboshop roboshop123
-rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
+rabbitmqctl add_user roboshop roboshop123 &>>$log_file
+rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>>$log_file
 validate $? "Creating application user"
 
 END_TIME=$(date +%s)
