@@ -22,24 +22,24 @@ fi
 
 validate() {
   if [ $1 -ne 0  ]; then
-     echo -e "$2 ....$r failed $n" | tee -a $LOG_FILE
+     echo -e "$2 ....$r failed $n" | tee -a $log_file
      exit 1
   else  
-     echo -e "$2 .... $g success $n" | tee -a $LOG_FILE
+     echo -e "$2 .... $g success $n" | tee -a $log_file
   fi
 }
 
-cp $script_dir/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo &>>$LOG_FILE
+cp $script_dir/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo &>>$log_file
 VALIDATE $? "Adding RabbitMQ repo"
 
-dnf install rabbitmq-server -y
-validate $? "Installing RabbitMQ" &>>$log_file
+dnf install rabbitmq-server -y  &>>$log_file
+validate $? "Installing RabbitMQ" 
 
-systemctl enable rabbitmq-server
-validate $? "Enabling RabbitMQ" &>>$log_file
+systemctl enable rabbitmq-server  &>>$log_file
+validate $? "Enabling RabbitMQ" 
 
 systemctl start rabbitmq-server
-validate $? "Starting RabbitMQ" &>>$log_file
+validate $? "Starting RabbitMQ" 
 
 rabbitmqctl add_user roboshop roboshop123
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
