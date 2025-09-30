@@ -42,7 +42,7 @@ validate $? "installing nodejs"
 id roboshop &>>$log_file
 if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$log_file
-    VALIDATE $? "Creating system user"
+    validate $? "Creating system user"
 else
     echo -e "User already exist ... $y SKIPPING $n"
 fi
@@ -54,40 +54,40 @@ curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue
 validate $? "downloading catalogue component"
 
 cd /app 
-VALIDATE $? "Changing to app directory"
+validate $? "Changing to app directory"
 
 rm -rf /app/*
-VALIDATE $? "Removing existing code"
+validate $? "Removing existing code"
 
 unzip /tmp/catalogue.zip &>>$log_file
 validate $? "unzipping catalogue component"
 
 npm install &>>$log_file
-VALIDATE $? "Install dependencies"
+validate $? "Install dependencies"
 
 cp $script_dir /catalogue.service /etc/systemd/system/catalogue.service
-VALIDATE $? "Copy systemctl service"
+validate $? "Copy systemctl service"
 
 systemctl daemon-reload
 systemctl enable catalogue &>>$log_file
-VALIDATE $? "Enable catalogue"
+validate $? "Enable catalogue"
 
 cp $script_dir /mongo.repo /etc/yum.repos.d/mongo.repo
-VALIDATE $? "Copy mongo repo"
+validate $? "Copy mongo repo"
 
 dnf install mongodb-mongosh -y &>>$log_file
-VALIDATE $? "Install MongoDB client"
+validate $? "Install MongoDB client"
 
 INDEX=$(mongosh mongodb.daws86s.fun --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')")
 if [ $INDEX -le 0 ]; then
     mongosh --host $mongodb_host </app/db/master-data.js &>>$log_file
-    VALIDATE $? "Load catalogue products"
+    validate $? "Load catalogue products"
 else
     echo -e "Catalogue products already loaded ... $y SKIPPING $n"
 fi
 
 systemctl restart catalogue &>>$log_file
-VALIDATE $? "Restarted catalogue"
+validate $? "Restarted catalogue"
 
 ND_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
