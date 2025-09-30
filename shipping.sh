@@ -37,25 +37,25 @@ dnf install maven -y &>>$log_file
 id roboshop &>>$log_file
 if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$log_file
-    VALIDATE $? "Creating system user"
+    validate $? "Creating system user"
 else
     echo -e "User already exist ... $y SKIPPING $n"
 fi
 
 mkdir -p /app
-VALIDATE $? "Creating app directory"
+validate $? "Creating app directory"
 
 curl -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip &>>$log_file
-VALIDATE $? "Downloading shipping application"
+validate $? "Downloading shipping application"
 
 cd /app 
-VALIDATE $? "Changing to app directory"
+validate $? "Changing to app directory"
 
 rm -rf /app/*
-VALIDATE $? "Removing existing code"
+validate $? "Removing existing code"
 
 unzip /tmp/shipping.zip &>>$log_file
-VALIDATE $? "unzip shipping"
+validate $? "unzip shipping"
 
 mvn clean package  &>>$log_file
 mv target/shipping-1.0.jar shipping.jar 
@@ -77,6 +77,6 @@ fi
 
 systemctl restart shipping
 
-ND_TIME=$(date +%s)
+END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
 echo -e "Script executed in: $y $TOTAL_TIME Seconds $n"
