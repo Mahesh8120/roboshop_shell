@@ -75,6 +75,9 @@ systemctl daemon-reload
 systemctl enable user &>>$log_file
 validate $? "Enable user"
 
+systemctl restart cart
+validate $? "Restarted cart"
+
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
 echo -e "Script executed in: $y $TOTAL_TIME Seconds $n"
