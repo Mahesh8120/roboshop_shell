@@ -73,7 +73,7 @@ validate $? "Copy systemctl service"
 systemctl daemon-reload
 
 systemctl enable cart &>>$log_file
-VALIDAT $? "Enable cart"
+validate $? "Enable cart"
 
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
