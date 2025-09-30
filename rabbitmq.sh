@@ -30,7 +30,7 @@ validate() {
 }
 
 cp $script_dir/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo &>>$log_file
-VALIDATE $? "Adding RabbitMQ repo"
+validate $? "Adding RabbitMQ repo"
 
 dnf install rabbitmq-server -y  &>>$log_file
 validate $? "Installing RabbitMQ" 
