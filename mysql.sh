@@ -36,7 +36,7 @@ validate $? "enabling mysql"
 
 systemctl start mysqld
 
-mysql_secure_installation --set-root-pass RoboShop@1 &>>$LOG_FILE
+mysql_secure_installation --set-root-pass RoboShop@1 &>>$log_file
 VALIDATE $? "Setting up Root password"
 
 END_TIME=$(date +%s)
