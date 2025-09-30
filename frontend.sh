@@ -36,37 +36,23 @@ validate() {
 }
 
 dnf module disable nginx -y &>>$log_file
-validate $? "disabling nginx"
-
 dnf module enable nginx:1.24 -y &>>$log_file
-validate $? "enabling nginx"
-
 dnf install nginx -y &>>$log_file
-validate $? "installing nginx"
+validate $? "Installing Nginx"
 
-systemctl enable nginx &>>$log_file
-systemctl start nginx
-validate $? "starting nginx"
+systemctl enable nginx  &>>$log_file
+systemctl start nginx 
+validate $? "Starting Nginx"
 
-rm -rf /usr/share/nginx/html/* &>>$log_file
-validate $? "Removing default content"
-
+rm -rf /usr/share/nginx/html/* 
 curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip &>>$log_file
-validate $? "Downloading frontend component"
-
-cd /usr/share/nginx/html &>>$log_file
-validate $? "Changing to nginx html directory"
-
+cd /usr/share/nginx/html 
 unzip /tmp/frontend.zip &>>$log_file
-validate $? "unzipping frontend component"
+validate $? "Downloading frontend"
 
-rm -rf /etc/nginx/nginx.conf &>>$log_file
-cp $script_dir/nginx.conf /etc/nginx/nginx.conf
-validate $? "Copying nginx configuration file"
+rm -rf /etc/nginx/nginx.conf
+cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf
+validate $? "Copying nginx.conf"
 
-systemctl restart nginx &>>$log_file
-validate $? "restarting nginx"
-
-END_TIME=$(date +%s)
-TOTAL_TIME=$(( $END_TIME - $START_TIME ))
-echo -e "Script executed in: $y $TOTAL_TIME Seconds $n"
+systemctl restart nginx 
+validate $? "Restarting Nginx"
