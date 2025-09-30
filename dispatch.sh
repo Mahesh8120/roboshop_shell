@@ -37,25 +37,25 @@ validate $? "installing golang"
 id roboshop &>>$log_file
 if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$log_file
-    VALIDATE $? "Creating system user"
+    validate $? "Creating system user"
 else
     echo -e "User already exist ... $y SKIPPING $n"
 fi
 
 mkdir -p /app
-VALIDATE $? "Creating app directory"
+validate $? "Creating app directory"
 
 curl -o /tmp/dispatch.zip https://roboshop-artifacts.s3.amazonaws.com/dispatch-v3.zip &>>$log_file
-VALIDATE $? "Downloading dispatch application"
+validate $? "Downloading dispatch application"
 
 cd /app 
-VALIDATE $? "Changing to app directory"
+validate $? "Changing to app directory"
 
 rm -rf /app/*
-VALIDATE $? "Removing existing code"
+validate $? "Removing existing code"
 
 unzip /tmp/dispatch.zip &>>$log_file
-VALIDATE $? "unzip dispatch"
+validate $? "unzip dispatch"
 
 cd /app 
 go mod init dispatch &>>$log_file
@@ -68,12 +68,12 @@ cp $script_dir/dispatch.service /etc/systemd/system/dispatch.service
 systemctl daemon-reload &>>$log_file
 
 systemctl enable dispatch
-VALIDATE $? "Enabling dispatch service"
+validate $? "Enabling dispatch service"
 
 systemctl start dispatch &>>$log_file
-VALIDATE $? "Starting dispatch service"
+validate $? "Starting dispatch service"
 
-ND_TIME=$(date +%s)
+END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
 echo -e "Script executed in: $y $TOTAL_TIME Seconds $n"
 
