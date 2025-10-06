@@ -20,7 +20,7 @@ else
   echo -e "$g you ar root user $n"
 fi
 
-validate() {
+validate(){
   if [ $1 -ne 0  ]; then
      echo -e "$2 ....$r failed $n" | tee -a $log_file
      exit 1
