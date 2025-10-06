@@ -10,8 +10,9 @@ script_name=$( echo $0 | cut -d "." -f1 )
 log_file="$logs_folder/$script_name.log"
 START_TIME=$(date +%s)
 script_dir=$PWD
-echo "Script started executed at: $(date)" | tee -a $log_file
+
 mkdir -p $logs_folder
+echo "Script started executed at: $(date)" | tee -a $log_file
 
 if [ $userid -ne 0 ]; then
   echo -e "$r run the script with root access $n" 
