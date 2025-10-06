@@ -9,7 +9,7 @@ logs_folder="/var/log/roboshop_shell"
 script_name=$( echo $0 | cut -d "." -f1 )
 log_file="$logs_folder/$script_name.log"
 redis_host="redis.sitaram.icu"
-mongodb_host="mongodb.sitaram.icu"
+mongodb_host=""
 script_dir=$PWD
 START_TIME=$(date +%s)
 
