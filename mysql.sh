@@ -21,10 +21,10 @@ fi
 
 validate() {
   if [ $1 -ne 0  ]; then
-     echo -e "$2 ....$r failed $n" | tee -a $LOG_FILE
+     echo -e "$2 ....$r failed $n" | tee -a $log_file
      exit 1
   else  
-     echo -e "$2 .... $g success $n" | tee -a $LOG_FILE
+     echo -e "$2 .... $g success $n" | tee -a $log_file
   fi
 }
 
